@@ -16,7 +16,8 @@ public class User {
     private Role role; // Changed from gender to role enum
     private String email;
     private String password;
-
+    private int accountNumber; 
+    
     public User() {
 
     }
@@ -84,4 +85,12 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+	public int getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(int accountNumber) {
+		this.accountNumber = accountNumber;
+	}
 }

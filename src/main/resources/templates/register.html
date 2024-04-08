@@ -71,19 +71,20 @@
                 <label for="password" class="form-label">Password:</label>
                 <input th:field="*{password}" type="password" id="password" name="password" class="form-control" placeholder="Enter your Password" required>
             </div>
+            <div class="col-md-6">
+                <label for="accountNumber" class="form-label">Account Number:</label>
+                <input th:field="*{accountNumber}" type="text" id="accountNumber" name="accountNumber" class="form-control" placeholder="Enter your Account Number" required>
+            </div>
             <div class="col-12">
                 <label class="form-label">Role:</label>
                 <div class="form-check">
                     <input th:field="*{role}" type="radio" class="form-check-input" id="farmer" name="role" th:value="${T(codingTechniques.model.Role).FARMER}">
                     <label class="form-check-label" for="farmer">Farmer</label>
                 </div>
+               
                 <div class="form-check">
                     <input th:field="*{role}" type="radio" class="form-check-input" id="buyer" name="role" th:value="${T(codingTechniques.model.Role).BUYER}">
                     <label class="form-check-label" for="buyer">Buyer</label>
-                </div>
-                <div class="form-check">
-                    <input th:field="*{role}" type="radio" class="form-check-input" id="marketOfficial" name="role" th:value="${T(codingTechniques.model.Role).MARKET_OFFICIAL}">
-                    <label class="form-check-label" for="marketOfficial">Market Official</label>
                 </div>
             </div>
             <div class="col-12">
