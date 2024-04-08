@@ -28,20 +28,41 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>User ID</th>
-                    <th>Market Official ID</th>
+                    <th>Draft Crop ID</th>
                     <th>Name</th>
+                    <th>Scientific Name</th>
+                    <th>Quantity</th>
+                    <th>Base Price Per Quintal</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Iterate over market officials and display their information -->
-                <tr th:each="marketOfficial : ${marketOfficials}">
-                    <td th:text="${marketOfficial.user.id}"></td>
-                    <td th:text="${marketOfficial.id}"></td>
-                    <td th:text="${marketOfficial.user.name}"></td>
+                <!-- Iterate over draft crops and display their information -->
+                <tr th:each="draftCrop : ${draftCrops}">
+                    <td th:text="${draftCrop.id}"></td>
+                    <td th:text="${draftCrop.name}"></td>
+                    <td th:text="${draftCrop.scientificName}"></td>
+                    <td th:text="${draftCrop.quantity}"></td>
+                    <td th:text="${draftCrop.basePricePerQuintal}"></td>
+                    <td th:text="${draftCrop.status}"></td>
+                    <td>
+                        <form method="post" th:action="@{/marketOfficial/{marketOfficialId}/updateCropStatus/{draftCropId}(marketOfficialId=${marketOfficialId},draftCropId=${draftCrop.id})}">
+                            <select name="status">
+                                <option value="APPROVED">Approved</option>
+                                <option value="REJECTED">Rejected</option>
+                            </select>
+                            <button type="submit">Update Status</button>
+                        </form>
+                    </td>
                 </tr>
             </tbody>
         </table>
+		<div class="text-center">
+			<form method="post" th:action="@{/marketOfficial/{marketOfficialId}/addApprovedCrops(marketOfficialId=${marketOfficialId})}">
+			    <button type="submit" class="btn btn-primary">Add Approved Crops to Final Crops</button>
+			</form>
+		</div>
     </div>
 
     <!-- Add Bootstrap JS (Optional) -->
