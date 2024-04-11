@@ -9,59 +9,122 @@
     <style>
         /* Custom styles */
         body {
-            background-color: #f8f9fa;
+            background: linear-gradient(120deg, #ffe6cc, rgb(161, 220, 147)); /* Gradient background with soft pastel colors */
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
         .container {
             max-width: 800px;
-            margin-top: 50px;
+            margin: 50px auto;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        }
+        .dashboard-header {
+            background-color: #355e3b; /* Dark green color */
+            color: #fff;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+        }
+        .dashboard-header h1 {
+            margin: 0;
+            font-size: 36px; /* Increase font size */
+            font-weight: bold; /* Make font bold */
+        }
+        .dashboard-header p {
+            font-size: 20px; /* Increase font size */
+            font-weight: bold; /* Make font bold */
+            margin-bottom: 0;
+        }
+        .logout-btn {
+            background-color: #ff4444; /* Red color */
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            color: #fff;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .logout-btn:hover {
+            background-color: #cc0000; /* Darker red color on hover */
+        }
+        .content-box {
+            border-radius: 20px;
+            background-color: #f8f9fa; /* Light gray color */
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        }
+        .btn-green {
+            background-color: #4CAF50; /* Green color */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .btn-green:hover {
+            background-color: #45a049; /* Darker green color on hover */
+        }
+        .table th {
+            background-color: #355e3b; /* Dark green color */
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .table td {
+            font-size: 16px;
+            text-align: center;
+            vertical-align: middle;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2 class="text-center mb-4">Farmer Dashboard</h2>
-        <h4>Welcome, <span th:text="${farmer.user.name}"></span> (Farmer ID: <span th:text="${farmer.id}"></span>)</h4>
-        <p>Email: <span th:text="${farmer.user.email}"></span> (User ID: <span th:text="${farmer.user.id}"></span>)</p>
-
-        <!-- Logout button -->
-       
-		<p>  </p>
-
+        <div class="dashboard-header mb-4">
+            <h1>Farmer Dashboard</h1>
+            <p>Welcome, <span th:text="${farmer.user.name}"></span> (Farmer ID: <span th:text="${farmer.id}"></span>)</p>
+            <a href="/login" class="btn btn-danger logout-btn">Logout</a>
+        </div>
+        
         <!-- Button to navigate to add crop page -->
-        <a href="#" class="btn btn-primary mb-3" th:href="@{'/farmer/' + ${farmer.id} + '/addCrop'}">Add Crop</a>
-		<!-- Logout button -->
-		<a href="/login" class="btn btn-danger mb-3">Logout</a>
-
+        <a href="#" class="btn btn-green mb-3" th:href="@{'/farmer/' + ${farmer.id} + '/addCrop'}">Add Crop</a>
 
         <!-- Display list of crops -->
-        <h3 class="mt-4">List of Crops</h3>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Crop ID</th>
-                    <th>Name</th>
-                    <th>Scientific Name</th>
-                    <th>Quantity in Quintal</th>
-                    <th>Base Price Per Quintal</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="crop : ${crops}">
-                    <td th:text="${crop.id}"></td>
-                    <td th:text="${crop.name}"></td>
-                    <td th:text="${crop.scientificName}"></td>
-                    <td th:text="${crop.quantity}"></td>
-                    <td th:text="${crop.basePricePerQuintal}"></td>
-                    <td th:text="${crop.status}"></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="content-box">
+            <h3>List of Crops</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Crop ID</th>
+                        <th>Name</th>
+                        <th>Scientific Name</th>
+                        <th>Quantity in Quintal</th>
+                        <th>Base Price Per Quintal</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="crop : ${crops}">
+                        <td th:text="${crop.id}"></td>
+                        <td th:text="${crop.name}"></td>
+                        <td th:text="${crop.scientificName}"></td>
+                        <td th:text="${crop.quantity}"></td>
+                        <td th:text="${crop.basePricePerQuintal}"></td>
+                        <td th:text="${crop.status}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Add Bootstrap JS (Optional) -->

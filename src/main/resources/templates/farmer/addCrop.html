@@ -9,16 +9,46 @@
     <style>
         /* Custom styles */
         body {
-            background-color: #f8f9fa;
+            background: linear-gradient(120deg, #ffe6cc, rgb(161, 220, 147)); /* Gradient background with soft pastel colors */
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
         .container {
             max-width: 800px;
             margin-top: 50px;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-label {
+            font-weight: bold;
+            color: #355e3b; /* Dark green color for labels */
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #355e3b; /* Dark green border */
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px; /* Increase font size */
+        }
+        .btn-primary {
+            background-color: #355e3b; /* Dark green color for button */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            transition: background-color 0.3s ease; /* Smooth transition */
+            font-size: 18px; /* Increase font size */
+        }
+        .btn-primary:hover {
+            background-color: #253d27; /* Darker green color on hover */
         }
     </style>
 </head>
