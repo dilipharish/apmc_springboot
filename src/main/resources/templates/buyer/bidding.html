@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bidding</title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        /* Custom styles */
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mb-4">Bidding</h2>
+        <!-- Form to place bid -->
+        <form id="bidForm" action="#" th:action="@{/bidding/{finalCropId}/{buyerId}(finalCropId=${finalCropId}, buyerId=${buyerId})}" th:object="${bidForm}" method="post">
+            <div class="mb-3">
+                <label for="bidAmount" class="form-label">Bid Amount:</label>
+                <input type="number" class="form-control" id="bidAmount" name="bidAmount" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Place Bid</button>
+        </form>
+        <!-- Display current maximum bid -->
+        <p class="mt-3">Current Max Bid: <span id="currentMaxBid" th:text="${currentMaxBid}"></span></p>
+        
+        <!-- Display bidding details -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Bid Amount</th>
+                    <th>Buyer ID</th>
+                    <th>Final Crop ID</th>
+                </tr>
+            </thead>
+            <tbody id="biddingSection">
+                <!-- Iterate over bidding details and display them -->
+                <tr th:each="bid : ${biddingDetails}">
+                    <td th:text="${bid.id}"></td>
+                    <td th:text="${bid.bidAmount}"></td>
+                    <td th:text="${bid.buyer.id}"></td>
+                    <td th:text="${bid.finalCrop.id}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Add Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <!-- Add jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-UBHaEXB6XJ6p3+z8CTs7xHjCvv7+SQooqBhEzPceH+C1M0Pj12xg8V0o+c+mt6PI" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Function to reload the page after 2 seconds
+            function reloadPage() {
+                location.reload();
+            }
+
+            // Call reloadPage function every 2 seconds
+            setTimeout(reloadPage, 2000);
+        });
+    </script>
+</body>
+</html>

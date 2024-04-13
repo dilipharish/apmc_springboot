@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.context.SecurityContextHolder;
-import javax.servlet.http.HttpSession;
+//import org.springframework.security.core.context.SecurityContextHolder;
+//import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -82,7 +82,7 @@ public class FarmerController {
     @GetMapping("/logout")
     public String logout() {
         // Logout the current user
-        SecurityContextHolder.clearContext();
+//        SecurityContextHolder.clearContext();
         return "redirect:/login";
     }
 }

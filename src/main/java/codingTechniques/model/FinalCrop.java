@@ -1,5 +1,7 @@
 package codingTechniques.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -9,18 +11,20 @@ public class FinalCrop {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "draft_crop_id", unique = true) // Ensure uniqueness
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "draft_crop_id")
     private DraftCrop draftCrop;
 
     @ManyToOne
     @JoinColumn(name = "buyer_id")
     private Buyer buyer;
 
-  
-
     @Column(name = "max_price")
     private int maxPrice;
+
+    // Add bid start time
+    @Column(name = "bid_start_time")
+    private LocalDateTime bidStartTime;
 
     // Constructors, getters, and setters
 
@@ -48,7 +52,6 @@ public class FinalCrop {
         this.buyer = buyer;
     }
 
-  
     public int getMaxPrice() {
         return maxPrice;
     }
@@ -56,4 +59,19 @@ public class FinalCrop {
     public void setMaxPrice(int maxPrice) {
         this.maxPrice = maxPrice;
     }
+
+    public LocalDateTime getBidStartTime() {
+        return bidStartTime;
+    }
+
+    public void setBidStartTime(LocalDateTime bidStartTime) {
+        this.bidStartTime = bidStartTime;
+    }
+
+    public void setBuyer(Long buyerId) {
+        Buyer buyer = new Buyer();
+        buyer.setId(buyerId);
+        this.buyer = buyer;
+    }
+
 }
