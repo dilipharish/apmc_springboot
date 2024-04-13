@@ -29,6 +29,9 @@
         <p>Email: <span th:text="${farmer.user.email}"></span> (User ID: <span th:text="${farmer.user.id}"></span>)</p>
 
         <!-- Logout button -->
+		<div class="text-center">
+		    <a th:href="@{'/farmer/' + ${farmer.id} + '/addReview'}" class="btn btn-primary">Add Review</a>
+		</div>
        
 		<p>  </p>
 

@@ -2,9 +2,13 @@ package codingTechniques.contoller;
 
 import codingTechniques.model.DraftCrop;
 import codingTechniques.model.Farmer;
+import codingTechniques.model.Review;
 import codingTechniques.repositories.DraftCropRepository;
 import codingTechniques.repositories.FarmerRepository;
+import codingTechniques.repositories.ReviewRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +24,10 @@ public class FarmerController {
 
     @Autowired
     private DraftCropRepository draftCropRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
 
     @GetMapping("/farmer/{farmerId}/dashboard")
     public String showFarmerDashboard(Model model, @PathVariable("farmerId") Long farmerId) {
@@ -78,7 +86,41 @@ public class FarmerController {
         // Redirect back to the farmer dashboard
         return "redirect:/farmer/" + farmerId + "/dashboard";
     }
-  
+    @GetMapping("/farmer/{farmerId}/addReview")
+    public String showAddReviewForm(Model model, @PathVariable("farmerId") Long farmerId) {
+        // Retrieve the farmer using the farmerId
+        Farmer farmer = farmerRepository.findById(farmerId).orElse(null);
+        if (farmer == null) {
+            // Handle the case where the farmer is not found
+            return "redirect:/error";
+        }
+
+        // Add the farmer to the model
+        model.addAttribute("farmer", farmer);
+        model.addAttribute("review", new Review());
+
+        return "farmer/addReview";
+    }
+
+    @PostMapping("/farmer/{farmerId}/addReview")
+    public String addReview(@ModelAttribute("review") Review review, @PathVariable("farmerId") Long farmerId) {
+        // Retrieve the farmer using the farmerId
+        Farmer farmer = farmerRepository.findById(farmerId).orElse(null);
+        if (farmer == null) {
+            // Handle the case where the farmer is not found
+            return "redirect:/error";
+        }
+
+        // Set the user for the review
+        review.setUser(farmer.getUser()); // Assuming user_id for farmer is the same as the user_id for review
+        
+        // Save the review to the database
+        reviewRepository.save(review);
+
+        // Redirect back to the farmer dashboard
+        return "redirect:/farmer/" + farmerId + "/dashboard";
+    }
+
     @GetMapping("/logout")
     public String logout() {
         // Logout the current user

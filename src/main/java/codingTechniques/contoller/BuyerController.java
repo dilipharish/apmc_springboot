@@ -3,14 +3,17 @@ package codingTechniques.contoller;
 import codingTechniques.model.Bidding;
 import codingTechniques.model.Buyer;
 import codingTechniques.model.FinalCrop;
+import codingTechniques.model.Review;
 import codingTechniques.repositories.BiddingRepository;
 import codingTechniques.repositories.BuyerRepository;
 import codingTechniques.repositories.FinalCropRepository;
+import codingTechniques.repositories.ReviewRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,6 +31,10 @@ public class BuyerController {
 
     @Autowired
     private BiddingRepository bidRepository;
+    
+    @Autowired
+    private ReviewRepository reviewRepository;
+
 
     @GetMapping("/buyer/{buyerId}/dashboard")
     public String buyerDashboard(@PathVariable("buyerId") Long buyerId, Model model) {
@@ -55,6 +62,44 @@ public class BuyerController {
             // Final crop not found or draft crop not set
             return "error";}
         }
+    
+    @GetMapping("/buyer/{buyerId}/addReview")
+    public String showAddReviewForm(Model model, @PathVariable("buyerId") Long buyerId) {
+        // Retrieve the buyer using the buyerId
+        Buyer buyer = buyerRepository.findById(buyerId).orElse(null);
+        if (buyer == null) {
+            // Handle the case where the buyer is not found
+            return "redirect:/error";
+        }
+
+        // Add the buyer to the model
+        model.addAttribute("buyer", buyer);
+        model.addAttribute("review", new Review());
+
+        return "buyer/addReview";
+    }
+
+    @PostMapping("/buyer/{buyerId}/addReview")
+    public String addReview(@ModelAttribute("review") Review review, @PathVariable("buyerId") Long buyerId) {
+        // Retrieve the buyer using the buyerId
+        Buyer buyer = buyerRepository.findById(buyerId).orElse(null);
+        if (buyer == null) {
+            // Handle the case where the buyer is not found
+            return "redirect:/error";
+        }
+
+        // Set the user for the review
+        review.setUser(buyer.getUser()); // Assuming user_id for buyer is the same as the user_id for review
+        
+        // Save the review to the database
+        reviewRepository.save(review);
+
+        // Redirect back to the buyer dashboard
+        return "redirect:/buyer/" + buyerId + "/dashboard";
+    }
+
+
+    
     @PostMapping("/bidding/{finalCropId}/{buyerId}")
     public String placeBid(@PathVariable("finalCropId") Long finalCropId, @PathVariable("buyerId") Long buyerId,
                            @RequestParam("bidAmount") double bidAmount, Model model) {

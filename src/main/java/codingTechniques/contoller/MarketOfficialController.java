@@ -8,7 +8,9 @@ import codingTechniques.model.DraftCrop;
 import codingTechniques.repositories.DraftCropRepository;
 import codingTechniques.repositories.FinalCropRepository;
 import codingTechniques.repositories.MarketOfficialRepository;
+import codingTechniques.repositories.ReviewRepository;
 import codingTechniques.model.FinalCrop;
+import codingTechniques.model.Review;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +30,9 @@ public class MarketOfficialController {
     private DraftCropRepository draftCropRepository;
     @Autowired
     private FinalCropRepository finalCropRepository ;
+    
+    @Autowired
+    private ReviewRepository reviewRepository;
     // Existing method to display market official dashboard
     @GetMapping("/marketOfficial/{marketOfficialId}/dashboard")
     public String marketOfficialDashboard(@PathVariable("marketOfficialId") Long marketOfficialId, Model model) {
@@ -88,6 +93,12 @@ public class MarketOfficialController {
 
         // Redirect back to the market official dashboard
         return "redirect:/marketOfficial/" + marketOfficialId + "/dashboard";
+    }
+    @GetMapping("/marketOfficial/{marketOfficialId}/reviews")
+    public String viewReviews(Model model) {
+        List<Review> reviews = reviewRepository.findAll();
+        model.addAttribute("reviews", reviews);
+        return "marketOfficial/reviews";
     }
 
     
