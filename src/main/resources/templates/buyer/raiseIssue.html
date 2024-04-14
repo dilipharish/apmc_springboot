@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raise Issue</title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        /* Custom styles */
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .message-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .message {
+            background-color: #f2f2f2;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .message.sent {
+            background-color: #d4edda;
+        }
+        .message.received {
+            background-color: #cce5ff;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mb-4">Raise Issue</h2>
+        <div class="message-container" id="messageContainer">
+            <!-- Messages will be dynamically added here -->
+        </div>
+        <form th:action="@{/buyer/{buyerId}/raiseIssue/{transactionId}(buyerId=${buyerId}, transactionId=${transaction.id})}" method="post" th:object="${issue}">
+            <div class="form-group">
+                <label for="message">Issue Message:</label>
+                <textarea class="form-control" id="message" rows="3" th:field="*{message}" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Raise Issue</button>
+        </form>
+        <!-- Include the issue/issue.html content inline -->
+        <h2>Issues for Final Crop</h2>
+        <div th:each="issue : ${issues}">
+            <div class="issue">
+                <p><strong>Sender:</strong> [[${issue.sender}]]</p>
+                <p><strong>Message:</strong> [[${issue.message}]]</p>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Add WebSocket JavaScript library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script>
+        // Connect to WebSocket endpoint
+        var socket = new SockJS('/websocket');
+        var stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(frame) {
+            console.log('Connected: ' + frame);
+            // Subscribe to the messaging topic
+            stompClient.subscribe('/topic/messages', function(message) {
+                showMessage(JSON.parse(message.body));
+            });
+        });
+
+        // Function to send a message
+        function sendMessage() {
+            var messageInput = document.getElementById('message');
+            var message = messageInput.value.trim();
+            if (message !== '') {
+                // Send the message to the server
+                stompClient.send('/app/sendMessage', {}, JSON.stringify({
+                    'message': message
+                }));
+                // Clear the message input
+                messageInput.value = '';
+            }
+            return false;
+        }
+
+        // Function to display a message in the chat container
+        function showMessage(message) {
+            var messageContainer = document.getElementById('messageContainer');
+            var messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.classList.add(message.sender === 'buyer' ? 'sent' : 'received');
+            messageElement.innerHTML = '<strong>' + message.sender.toUpperCase() + ':</strong> ' + message.content;
+            messageContainer.appendChild(messageElement);
+            // Scroll to bottom
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+        }
+
+        // Handle form submission
+        document.getElementById('messageForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            sendMessage();
+        });
+    </script>
+</body>
+</html>

@@ -7,15 +7,19 @@ import codingTechniques.model.CropStatus;
 import codingTechniques.model.DraftCrop;
 import codingTechniques.repositories.DraftCropRepository;
 import codingTechniques.repositories.FinalCropRepository;
+import codingTechniques.repositories.IssueRepository;
 import codingTechniques.repositories.MarketOfficialRepository;
 import codingTechniques.repositories.ReviewRepository;
 import codingTechniques.model.FinalCrop;
+import codingTechniques.model.Issue;
+import codingTechniques.model.MarketOfficial;
 import codingTechniques.model.Review;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +37,8 @@ public class MarketOfficialController {
     
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private IssueRepository issueRepository;
     // Existing method to display market official dashboard
     @GetMapping("/marketOfficial/{marketOfficialId}/dashboard")
     public String marketOfficialDashboard(@PathVariable("marketOfficialId") Long marketOfficialId, Model model) {
@@ -100,6 +106,70 @@ public class MarketOfficialController {
         model.addAttribute("reviews", reviews);
         return "marketOfficial/reviews";
     }
+    @GetMapping("/marketOfficial/{marketOfficialId}/finalCropTransactions")
+    public String viewFinalCropTransactions(@PathVariable("marketOfficialId") String marketOfficialId, Model model) {
+        // Retrieve final crop transactions where buyerId is not null
+        List<FinalCrop> finalCropTransactions = finalCropRepository.findByBuyerIdNotNull();
+        model.addAttribute("finalCropTransactions", finalCropTransactions);
+        return "marketOfficial/finalCropTransactions";
+    }
+    @GetMapping("/marketOfficial/{marketOfficialId}/raiseIssue/{transactionId}")
+    public String showRaiseIssueForm(@PathVariable("marketOfficialId") String marketOfficialId, @PathVariable("transactionId") Long transactionId, Model model) {
+        // Retrieve the transaction using the transactionId
+        FinalCrop transaction = finalCropRepository.findById(transactionId).orElse(null);
+        if (transaction == null) {
+            // Handle the case where the transaction is not found
+            return "redirect:/error";
+        }
+
+        // Create a new Issue object and set the necessary properties
+        Issue issue = new Issue(); // Assuming Issue is your model class
+        issue.setFarmer(transaction.getDraftCrop().getFarmer()); // Set the farmer from the draft crop
+
+        // Add the Issue object to the model
+        model.addAttribute("issue", issue);
+
+        // Your code to fetch transaction details and prepare the model
+
+        return "marketOfficial/raiseIssue"; // Assuming "raiseIssue" is the Thymeleaf template name
+    }
+
+
+//    @PostMapping("/marketOfficial/{marketOfficialId}/raiseIssue/{transactionId}")
+//    public String raiseIssue1(@PathVariable("marketOfficialId") Long marketOfficialId, @PathVariable("transactionId") Long transactionId, @ModelAttribute("issue") Issue issue) {
+//        // Your code to handle the POST request and save the issue
+//        return "redirect:/marketOfficial/" + marketOfficialId + "/transactions"; // Assuming redirection after raising the issue
+//    }
+
+    @PostMapping("/marketOfficial/{marketOfficialId}/raiseIssue/{transactionId}")
+    public String raiseIssue(@PathVariable("marketOfficialId") String marketOfficialId, @PathVariable("transactionId") Long transactionId, @ModelAttribute("issue") Issue issue) {
+        // Retrieve the market official using the marketOfficialId
+        MarketOfficial marketOfficial = marketOfficialRepository.findById(102L).orElse(null);
+        if (marketOfficial == null) {
+            // Handle the case where the market official is not found
+            return "redirect:/error";
+        }
+
+        // Retrieve the transaction using the transactionId
+        FinalCrop transaction = finalCropRepository.findById(transactionId).orElse(null);
+        if (transaction == null) {
+            // Handle the case where the transaction is not found
+            return "redirect:/error";
+        }
+
+        // Set the market official, buyer, and final crops for the issue
+//        issue.setMarketOfficerId(102);
+        issue.setBuyer(transaction.getBuyer());
+        issue.setFinalCropsId(transaction.getId());
+        issue.setSender("market_officer"); // Assuming the market officer is the sender
+issue.setFarmer(transaction.getDraftCrop().getFarmer());
+        // Save the issue to the database
+        issueRepository.save(issue);
+
+        // Redirect to the issue page
+        return "redirect:/issue/" + "102" + "/" + issue.getFarmer().getId() + "/" + issue.getBuyer().getId() + "/" + transactionId;
+    }
+
 
     
 }

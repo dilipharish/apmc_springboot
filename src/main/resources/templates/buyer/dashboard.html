@@ -24,14 +24,39 @@
 </head>
 <body>
     <div class="container">
-        <h2 class="text-center mb-4">Buyer Dashboard</h2>
+        <!-- Buyer ID -->
+        <h2 class="text-center mb-4">Buyer Dashboard (ID: <span th:text="${buyerId}"></span>)</h2>
+		
+		
+		<p>  </p>
+        <!-- Line between buttons and table -->
+        <hr>
+        
         <!-- Button to add review -->
 		<div class="text-center mb-3">
+		    <!-- Button to add a review for a buyer -->
 		    <a th:href="@{'/buyer/' + ${buyerId} + '/addReview'}" class="btn btn-primary">Add Review</a>
+		    <p>Add a review about this Website</p>
 		</div>
        
 		<p>  </p>
-
+		
+		<!-- Line between buttons and table -->
+        <hr>
+		
+		<!-- Button to navigate to the transactions page -->
+		<div class="text-center mt-3">
+		    <!-- Button to view transactions -->
+		    <a th:href="@{'/buyer/' + ${buyerId} + '/transactions'}" class="btn btn-info">See Transactions</a>
+		    <p>View your past transactions</p>
+		</div>
+		
+		<p>  </p>
+		
+        <!-- Line between buttons and table -->
+        <hr>
+        
+        <!-- Table to display final crops -->
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -44,12 +69,15 @@
             <tbody>
                 <!-- Iterate over final crops without a buyer and display their information -->
                 <tr th:each="crop : ${finalCrops}">
+                    <!-- Display final crop ID -->
                     <td th:text="${crop.id}"></td>
+                    <!-- Display final crop name -->
                     <td th:text="${crop.draftCrop.name}"></td>
-                    <!-- Fetch the base price from the associated draft crop -->
+                    <!-- Display base price from associated draft crop -->
                     <td th:text="${crop.draftCrop.basePricePerQuintal}"></td>
                     <!-- Button to join bidding for the final crop -->
                     <td>
+                        <!-- Button to join bidding -->
                         <a th:href="@{/bidding/{finalCropId}/{buyerId}(finalCropId=${crop.id}, buyerId=${buyerId})}" class="btn btn-primary">Join Bidding</a>
                     </td>
                 </tr>

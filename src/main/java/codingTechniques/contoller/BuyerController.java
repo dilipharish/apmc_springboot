@@ -3,11 +3,14 @@ package codingTechniques.contoller;
 import codingTechniques.model.Bidding;
 import codingTechniques.model.Buyer;
 import codingTechniques.model.FinalCrop;
+import codingTechniques.model.Issue;
 import codingTechniques.model.Review;
 import codingTechniques.repositories.BiddingRepository;
 import codingTechniques.repositories.BuyerRepository;
 import codingTechniques.repositories.FinalCropRepository;
 import codingTechniques.repositories.ReviewRepository;
+import codingTechniques.repositories.IssueRepository;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +37,9 @@ public class BuyerController {
     
     @Autowired
     private ReviewRepository reviewRepository;
+    
+    @Autowired
+    private IssueRepository issueRepository;
 
 
     @GetMapping("/buyer/{buyerId}/dashboard")
@@ -140,4 +146,63 @@ public class BuyerController {
         Double maxBid = bidRepository.findMaxBidAmountByFinalCropId(finalCropId);
         return maxBid != null ? maxBid : 0;
     }
+    
+    @GetMapping("/buyer/{buyerId}/transactions")
+    public String showTransactions(@PathVariable("buyerId") Long buyerId, Model model) {
+        // Query final crops where buyerId matches
+        List<FinalCrop> buyerTransactions = finalCropRepository.findByBuyerId(buyerId);
+        model.addAttribute("transactions", buyerTransactions);
+        return "buyer/transactions";
+    }
+    
+    @GetMapping("/buyer/{buyerId}/raiseIssue/{transactionId}")
+    public String showRaiseIssueForm(@PathVariable("buyerId") Long buyerId, @PathVariable("transactionId") Long transactionId, Model model) {
+        // Fetch the transaction
+        FinalCrop transaction = finalCropRepository.findById(transactionId).orElse(null);
+        if (transaction == null) {
+            // Handle the case where the transaction is not found
+            return "redirect:/error";
+        }
+
+        // Add transaction details to the model
+        model.addAttribute("transaction", transaction);
+        model.addAttribute("buyerId", buyerId);
+
+        // Add an empty Issue object to the model
+        model.addAttribute("issue", new Issue());
+
+        return "buyer/raiseIssue";
+    }
+
+    @PostMapping("/buyer/{buyerId}/raiseIssue/{transactionId}")
+    public String raiseIssue(@PathVariable("buyerId") Long buyerId, @PathVariable("transactionId") Long transactionId, @ModelAttribute("issue") Issue issue) {
+        // Retrieve the buyer using the buyerId
+        Buyer buyer = buyerRepository.findById(buyerId).orElse(null);
+        if (buyer == null) {
+            // Handle the case where the buyer is not found
+            return "redirect:/error";
+        }
+
+        // Retrieve the transaction using the transactionId
+        FinalCrop transaction = finalCropRepository.findById(transactionId).orElse(null);
+        if (transaction == null) {
+            // Handle the case where the transaction is not found
+            return "redirect:/error";
+        }
+
+        // Set the buyer, farmer, and final crops for the issue
+        issue.setBuyer(buyer);
+        issue.setFarmer(transaction.getDraftCrop().getFarmer());
+        issue.setFinalCropsId(transaction.getId());
+        issue.setSender("buyer"); // Assuming the buyer is the sender
+
+        // Save the issue to the database
+        issueRepository.save(issue);
+
+        // Redirect to the issue page
+        return "redirect:/issue/" + "102" + "/" + issue.getFarmer().getId() + "/" + buyerId + "/" + transactionId;
+    }
+
+
+
 }

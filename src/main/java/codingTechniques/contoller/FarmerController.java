@@ -2,9 +2,13 @@ package codingTechniques.contoller;
 
 import codingTechniques.model.DraftCrop;
 import codingTechniques.model.Farmer;
+import codingTechniques.model.FinalCrop;
+import codingTechniques.model.Issue;
 import codingTechniques.model.Review;
 import codingTechniques.repositories.DraftCropRepository;
 import codingTechniques.repositories.FarmerRepository;
+import codingTechniques.repositories.FinalCropRepository;
+import codingTechniques.repositories.IssueRepository;
 import codingTechniques.repositories.ReviewRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +31,10 @@ public class FarmerController {
 
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private FinalCropRepository finalCropRepository;
+    @Autowired
+    private IssueRepository issueRepository;
 
 
     @GetMapping("/farmer/{farmerId}/dashboard")
@@ -119,6 +127,71 @@ public class FarmerController {
 
         // Redirect back to the farmer dashboard
         return "redirect:/farmer/" + farmerId + "/dashboard";
+    }
+    @GetMapping("/farmer/{farmerId}/transactions")
+    public String showFarmerTransactions(@PathVariable("farmerId") Long farmerId, Model model) {
+        // Retrieve the farmer using the farmerId
+        Farmer farmer = farmerRepository.findById(farmerId).orElse(null);
+
+        if (farmer == null) {
+            // Handle the case where the farmer is not found
+            return "error";
+        }
+
+        // Retrieve final crops where the farmer's draft crops are referenced and buyer ID is not null
+        List<FinalCrop> transactions = finalCropRepository.findByDraftCrop_FarmerAndBuyerIsNotNull(farmer);
+
+        // Add transactions to the view
+        model.addAttribute("transactions", transactions);
+
+        return "farmer/transactions";
+    }
+    @GetMapping("/farmer/{farmerId}/raiseIssue/{transactionId}")
+    public String showRaiseIssueForm(@PathVariable("farmerId") Long farmerId, @PathVariable("transactionId") Long transactionId, Model model) {
+        // Fetch the transaction
+        FinalCrop transaction = finalCropRepository.findById(transactionId).orElse(null);
+        if (transaction == null) {
+            // Handle the case where the transaction is not found
+            return "redirect:/error";
+        }
+
+        // Add transaction details to the model
+        model.addAttribute("transaction", transaction);
+        model.addAttribute("farmerId", farmerId);
+
+        // Add an empty Issue object to the model
+        model.addAttribute("issue", new Issue());
+
+        return "farmer/raiseIssue";
+    }
+
+    @PostMapping("/farmer/{farmerId}/raiseIssue/{transactionId}")
+    public String raiseIssue(@PathVariable("farmerId") Long farmerId, @PathVariable("transactionId") Long transactionId, @ModelAttribute("issue") Issue issue) {
+        // Retrieve the farmer using the farmerId
+        Farmer farmer = farmerRepository.findById(farmerId).orElse(null);
+        if (farmer == null) {
+            // Handle the case where the farmer is not found
+            return "redirect:/error";
+        }
+
+        // Retrieve the transaction using the transactionId
+        FinalCrop transaction = finalCropRepository.findById(transactionId).orElse(null);
+        if (transaction == null) {
+            // Handle the case where the transaction is not found
+            return "redirect:/error";
+        }
+
+        // Set the farmer, buyer, and final crops for the issue
+        issue.setFarmer(farmer);
+        issue.setBuyer(transaction.getBuyer());
+        issue.setFinalCropsId(transaction.getId());
+        issue.setSender("farmer"); // Assuming the farmer is the sender
+
+        // Save the issue to the database
+        issueRepository.save(issue);
+
+        // Redirect to the issue page
+        return "redirect:/issue/" + "102" + "/" + farmerId + "/" + issue.getBuyer().getId() + "/" + transactionId;
     }
 
     @GetMapping("/logout")

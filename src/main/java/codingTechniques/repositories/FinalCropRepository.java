@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import codingTechniques.model.Farmer;
 import codingTechniques.model.FinalCrop;
 
 @Repository
@@ -21,4 +22,10 @@ public interface FinalCropRepository extends JpaRepository<FinalCrop, Long> {
 	List<FinalCrop> findByBuyerIsNull();
 
 	List<FinalCrop> findByBuyerIdIsNull();
+
+	List<FinalCrop> findByDraftCropFarmerId(Long farmerId);
+
+	List<FinalCrop> findByDraftCrop_FarmerAndBuyerIsNotNull(Farmer farmer);
+
+	List<FinalCrop> findByBuyerIdNotNull();
 }
