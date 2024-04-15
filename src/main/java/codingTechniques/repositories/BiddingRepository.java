@@ -3,8 +3,10 @@ package codingTechniques.repositories;
 
 
 import codingTechniques.model.Bidding;
+import codingTechniques.model.Buyer;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +22,10 @@ public interface BiddingRepository extends JpaRepository<Bidding, Long> {
 	List<Bidding> findAllByFinalCropId(Long finalCropId);
 
 	int countBidsByFinalCropId(Long finalCropId);
+
+	Optional<Bidding> findFirstByFinalCropIdOrderByBidAmountDesc(Long finalCropId);
+
+//	Buyer findBuyerIdByFinalCropIdAndMaxBidAmount(Long finalCropId, Double maxBidAmount);
+	
+
 }

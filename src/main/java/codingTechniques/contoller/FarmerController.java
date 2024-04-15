@@ -16,6 +16,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 //import org.springframework.security.core.context.SecurityContextHolder;
 //import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -185,7 +187,8 @@ public class FarmerController {
         issue.setFarmer(farmer);
         issue.setBuyer(transaction.getBuyer());
         issue.setFinalCropsId(transaction.getId());
-        issue.setSender("farmer"); // Assuming the farmer is the sender
+        issue.setSender("farmer");
+        issue.setTimestamp(LocalDateTime.now());// Assuming the farmer is the sender
 
         // Save the issue to the database
         issueRepository.save(issue);

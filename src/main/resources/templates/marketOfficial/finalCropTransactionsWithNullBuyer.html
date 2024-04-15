@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Add necessary meta tags, title, and CSS links -->
+    <style>
+        /* Custom styles */
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #ffe6cc, rgb(161, 220, 147)); /* Gradient background with soft pastel colors */
+            height: 100vh; /* Full height background */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #355e3b; /* Dark green color for button */
+            color: #fff;
+            padding: 8px 20px; /* Adjusted padding */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+        .btn-primary:hover {
+            background-color: #253d27; /* Darker green color on hover */
+        }
+        .table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .table th, .table td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .table th {
+            background-color: #355e3b; /* Dark green color */
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            vertical-align: middle;
+        }
+        .table td {
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Add necessary header and buttons -->
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Draft Crop ID</th>
+                    <th>Final Crop ID</th>
+                    <th>Name</th>
+                    <th>Scientific Name</th>
+                    <th>Quantity</th>
+                    <th>Base Price Per Quintal</th>
+                    <th>Status</th>
+                    <th>Action</th> <!-- Add a new column for the action button -->
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Iterate over final crop transactions with null buyer and display their information -->
+                <tr th:each="finalCrop : ${finalCropTransactions}">
+                    <td th:text="${finalCrop.id}" style="text-align: center; vertical-align: middle;"></td>
+                    <td th:text="${finalCrop.draftCrop.id}" style="text-align: center; vertical-align: middle;"></td>
+                    <td th:text="${finalCrop.draftCrop.name}" style="text-align: center; vertical-align: middle;"></td>
+                    <td th:text="${finalCrop.draftCrop.scientificName}" style="text-align: center; vertical-align: middle;"></td>
+                    <td th:text="${finalCrop.draftCrop.quantity}" style="text-align: center; vertical-align: middle;"></td>
+                    <td th:text="${finalCrop.draftCrop.basePricePerQuintal}" style="text-align: center; vertical-align: middle;"></td>
+                    <td th:text="${finalCrop.draftCrop.status}" style="text-align: center; vertical-align: middle;"></td>
+                    <!-- Add the "End Bid" button in the action column -->
+                    <td>
+                        <form action="/marketOfficial/endBid" method="post">
+                            <input type="hidden" name="finalCropId" th:value="${finalCrop.id}" />
+                            <button type="submit" class="btn-primary">End Bid</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Add necessary JavaScript links -->
+</body>
+</html>

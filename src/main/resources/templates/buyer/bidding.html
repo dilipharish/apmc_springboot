@@ -72,27 +72,31 @@
         </form>
         <!-- Display current maximum bid -->
         <p class="mt-3">Current Max Bid: <span id="currentMaxBid" th:text="${currentMaxBid}"></span></p>
-        
+	 
         <!-- Display bidding details -->
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Bid Amount</th>
-                    <th>Buyer ID</th>
-                    <th>Final Crop ID</th>
-                </tr>
-            </thead>
-            <tbody id="biddingSection">
-                <!-- Iterate over bidding details and display them -->
-                <tr th:each="bid : ${biddingDetails}">
-                    <td th:text="${bid.id}"></td>
-                    <td th:text="${bid.bidAmount}"></td>
-                    <td th:text="${bid.buyer.id}"></td>
-                    <td th:text="${bid.finalCrop.id}"></td>
-                </tr>
-            </tbody>
-        </table>
+		<!-- Display bidding details -->
+		<table class="table table-striped">
+		    <thead>
+		        <tr>
+		            <th>ID</th>
+		            <th>Bid Amount</th>
+		            <th>Buyer ID</th>
+		            <th>Final Crop ID</th>
+		            <th>Base Price</th> <!-- Add a new column for base price -->
+		        </tr>
+		    </thead>
+		    <tbody id="biddingSection">
+		        <!-- Iterate over bidding details and display them -->
+		        <tr th:each="bid : ${biddingDetails}">
+		            <td th:text="${bid.id}"></td>
+		            <td th:text="${bid.bidAmount}"></td>
+		            <td th:text="${bid.buyer.id}"></td>
+		            <td th:text="${bid.finalCrop.id}"></td>
+		            <!-- Access base price from the associated draft crop -->
+		            <td th:text="${bid.finalCrop.draftCrop.basePricePerQuintal}"></td>
+		        </tr>
+		    </tbody>
+		</table>
     </div>
 
     <!-- Add Bootstrap JS (Optional) -->

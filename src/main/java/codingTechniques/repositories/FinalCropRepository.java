@@ -28,4 +28,5 @@ public interface FinalCropRepository extends JpaRepository<FinalCrop, Long> {
 	List<FinalCrop> findByDraftCrop_FarmerAndBuyerIsNotNull(Farmer farmer);
 
 	List<FinalCrop> findByBuyerIdNotNull();
+	
 }

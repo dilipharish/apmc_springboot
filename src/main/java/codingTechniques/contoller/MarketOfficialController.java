@@ -2,14 +2,20 @@ package codingTechniques.contoller;
 
 
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+
+import codingTechniques.model.Bidding;
 import codingTechniques.model.CropStatus;
 import codingTechniques.model.DraftCrop;
+import codingTechniques.repositories.BiddingRepository;
 import codingTechniques.repositories.DraftCropRepository;
 import codingTechniques.repositories.FinalCropRepository;
 import codingTechniques.repositories.IssueRepository;
 import codingTechniques.repositories.MarketOfficialRepository;
 import codingTechniques.repositories.ReviewRepository;
+import jakarta.transaction.Transactional;
 import codingTechniques.model.FinalCrop;
 import codingTechniques.model.Issue;
 import codingTechniques.model.MarketOfficial;
@@ -39,6 +45,8 @@ public class MarketOfficialController {
     private ReviewRepository reviewRepository;
     @Autowired
     private IssueRepository issueRepository;
+    @Autowired
+    private BiddingRepository biddingRepository;
     // Existing method to display market official dashboard
     @GetMapping("/marketOfficial/{marketOfficialId}/dashboard")
     public String marketOfficialDashboard(@PathVariable("marketOfficialId") Long marketOfficialId, Model model) {
@@ -163,6 +171,7 @@ public class MarketOfficialController {
         issue.setFinalCropsId(transaction.getId());
         issue.setSender("market_officer"); // Assuming the market officer is the sender
 issue.setFarmer(transaction.getDraftCrop().getFarmer());
+issue.setTimestamp(LocalDateTime.now());
         // Save the issue to the database
         issueRepository.save(issue);
 
@@ -170,6 +179,43 @@ issue.setFarmer(transaction.getDraftCrop().getFarmer());
         return "redirect:/issue/" + "102" + "/" + issue.getFarmer().getId() + "/" + issue.getBuyer().getId() + "/" + transactionId;
     }
 
+    @GetMapping("/marketOfficial/{marketOfficialId}/finalCropTransactionsWithNullBuyer")
+    public String viewFinalCropTransactionsWithNullBuyer(@PathVariable("marketOfficialId") String marketOfficialId, Model model) {
+        // Retrieve final crop transactions where buyerId is null
+        List<FinalCrop> finalCropTransactions = finalCropRepository.findByBuyerIdIsNull();
+        model.addAttribute("finalCropTransactions", finalCropTransactions);
+        return "marketOfficial/finalCropTransactionsWithNullBuyer";
+    }
+    
+    
+    @PostMapping("/marketOfficial/endBid")
+    @Transactional
+    public String endBid(@RequestParam("finalCropId") Long finalCropId) {
+        // Retrieve the maximum bid amount for the given finalCropId
+        Optional<Bidding> maxBidOptional = biddingRepository.findFirstByFinalCropIdOrderByBidAmountDesc(finalCropId);
+        if (maxBidOptional.isEmpty()) {
+            // Handle case where there are no bids for the given finalCropId
+            return "error";
+        }
+        Bidding maxBid = maxBidOptional.get();
 
+        // Retrieve the buyerId from the maximum bid
+        Long buyerId = maxBid.getBuyer().getId();
+
+        // Update the FinalCrop entity with the buyerId
+        FinalCrop finalCrop = finalCropRepository.findById(finalCropId).orElse(null);
+        if (finalCrop == null) {
+            // Handle case where FinalCrop with given finalCropId is not found
+            return "error";
+        }
+        finalCrop.setBuyer(buyerId);
+        finalCrop.setMaxPrice((int)(maxBid.getBidAmount()));
+
+        // Save the updated FinalCrop entity
+        finalCropRepository.save(finalCrop);
+
+        // Redirect back to the market official dashboard
+        return "redirect:/marketOfficial/" + "102" + "/dashboard";
+    }
     
 }

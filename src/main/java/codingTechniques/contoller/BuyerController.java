@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -117,7 +118,7 @@ public class BuyerController {
             // Fetch the number of existing bids for the final crop
             int numberOfBids = bidRepository.countBidsByFinalCropId(finalCropId);
             // Check if the new bid is higher than the current highest bid and if the number of bids is less than ten
-            if (bidAmount > currentMaxBid && numberOfBids < 10) {
+            if (bidAmount > currentMaxBid &&  bidAmount>finalCrop.getDraftCrop().getBasePricePerQuintal() &&numberOfBids < 10) {
                 // Save the new bid
                 Bidding bid = new Bidding();
                 bid.setFinalCrop(finalCrop);
@@ -194,7 +195,8 @@ public class BuyerController {
         issue.setBuyer(buyer);
         issue.setFarmer(transaction.getDraftCrop().getFarmer());
         issue.setFinalCropsId(transaction.getId());
-        issue.setSender("buyer"); // Assuming the buyer is the sender
+        issue.setSender("buyer"); 
+        issue.setTimestamp(LocalDateTime.now());// Assuming the buyer is the sender
 
         // Save the issue to the database
         issueRepository.save(issue);
