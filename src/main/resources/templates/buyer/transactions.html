@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,52 +11,90 @@
         body {
             background-color: #f8f9fa;
             font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #ffe6cc, rgb(161, 220, 147)); /* Gradient background with soft pastel colors */
+            height: 100vh; /* Full height background */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .container {
             max-width: 800px;
             margin-top: 50px;
             padding: 20px;
-            background-color: #fff;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 91, 36);
+            background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
+        }
+        .container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #355e3b; /* Dark green color for heading */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Text shadow for depth */
+        }
+        .table {
+            color: #212529;
+        }
+        .table th, .table td {
+            border-color: #dee2e6;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        .btn-primary {
+            background-color: #355e3b; /* Dark green color for button */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+        .btn-primary:hover {
+            background-color: #253d27; /* Darker green color on hover */
+        }
+        .btn-danger {
+            background-color: #dc3545; /* Red color for button */
+            border-color: #dc3545;
+        }
+        .btn-danger:hover {
+            background-color: #c82333; /* Darker red color on hover */
+            border-color: #bd2130;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2 class="text-center mb-4">Buyer Transactions</h2>
+        <h2>Buyer Transactions</h2>
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Transaction ID</th>
-				
                     <th>Crop Name</th>
                     <th>Base Price</th>
                     <th>Max Price</th>
-					<th>Farmer Name</th>
-					<th>Farmer Id</th>
+                    <th>Farmer Name</th>
+                    <th>Farmer Id</th>
                     <th>Farmer Account Number</th>
-					<th>Raise Issue</th>
-					
+                    <th>Raise Issue</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- Iterate over transactions and display their details -->
                 <tr th:each="transaction : ${transactions}">
-					<!-- Iterate over transactions and display their details -->
-					<tr th:each="transaction : ${transactions}">
-					    <td th:text="${transaction.id}"></td>
-					    <td th:text="${transaction.draftCrop.name}"></td>
-					    <td th:text="${transaction.draftCrop.basePricePerQuintal}"></td>
-					    <td th:text="${transaction.maxPrice}"></td>
-					    <td th:text="${transaction.draftCrop.farmer.user.name}"></td>
-					    <td th:text="${transaction.draftCrop.farmer.id}"></td>
-					    <td th:text="${transaction.draftCrop.farmer.user.accountNumber}"></td>
-					    <!-- Button to raise an issue -->
-					    <td>
-					        <a th:href="@{'/buyer/' + ${buyerId} + '/raiseIssue/' + ${transaction.id}}" class="btn btn-danger">Raise Issue</a>
-					    </td>
-					</tr>
+                    <td th:text="${transaction.id}"></td>
+                    <td th:text="${transaction.draftCrop.name}"></td>
+                    <td th:text="${transaction.draftCrop.basePricePerQuintal}"></td>
+                    <td th:text="${transaction.maxPrice}"></td>
+                    <td th:text="${transaction.draftCrop.farmer.user.name}"></td>
+                    <td th:text="${transaction.draftCrop.farmer.id}"></td>
+                    <td th:text="${transaction.draftCrop.farmer.user.accountNumber}"></td>
+                    <!-- Button to raise an issue -->
+                    <td>
+                        <a th:href="@{'/buyer/' + ${buyerId} + '/raiseIssue/' + ${transaction.id}}" class="btn btn-danger">Raise Issue</a>
+                    </td>
                 </tr>
             </tbody>
         </table>

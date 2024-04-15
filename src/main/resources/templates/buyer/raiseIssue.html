@@ -11,6 +11,12 @@
         body {
             background-color: #f8f9fa;
             font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #ffe6cc, rgb(161, 220, 147)); /* Gradient background with soft pastel colors */
+            height: 100vh; /* Full height background */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .container {
             max-width: 800px;
@@ -18,7 +24,7 @@
             padding: 20px;
             background-color: #fff;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 91, 36);
         }
         .message-container {
             max-height: 400px;
@@ -42,6 +48,31 @@
         .form-group {
             margin-bottom: 20px;
         }
+        .btn-primary {
+            background-color: #355e3b; /* Dark green color for button */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+        .btn-primary:hover {
+            background-color: #253d27; /* Darker green color on hover */
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #355e3b; /* Dark green border */
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        label {
+            font-weight: bold;
+            color: #355e3b; /* Dark green color for labels */
+        }
     </style>
 </head>
 <body>
@@ -50,12 +81,16 @@
         <div class="message-container" id="messageContainer">
             <!-- Messages will be dynamically added here -->
         </div>
-        <form th:action="@{/buyer/{buyerId}/raiseIssue/{transactionId}(buyerId=${buyerId}, transactionId=${transaction.id})}" method="post" th:object="${issue}">
-            <div class="form-group">
-                <label for="message">Issue Message:</label>
-                <textarea class="form-control" id="message" rows="3" th:field="*{message}" required></textarea>
+        <form th:action="@{/buyer/{buyerId}/raiseIssue/{transactionId}(buyerId=${buyerId}, transactionId=${transaction.id})}" method="post" th:object="${issue}" class="row g-3">
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="message">Issue Message:</label>
+                    <textarea class="form-control" id="message" rows="3" th:field="*{message}" required></textarea>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">Raise Issue</button>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Raise Issue</button>
+            </div>
         </form>
         <!-- Include the issue/issue.html content inline -->
         <h2>Issues for Final Crop</h2>
@@ -63,7 +98,6 @@
             <div class="issue">
                 <p><strong>Sender:</strong> [[${issue.sender}]]</p>
                 <p><strong>Message:</strong> [[${issue.message}]]</p>
-                
             </div>
         </div>
     </div>

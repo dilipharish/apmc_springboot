@@ -11,6 +11,12 @@
         body {
             background-color: #f8f9fa;
             font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #ffe6cc, rgb(161, 220, 147)); /* Gradient background with soft pastel colors */
+            height: 100vh; /* Full height background */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .container {
             max-width: 800px;
@@ -19,6 +25,16 @@
             background-color: #fff;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .list-group-item {
+            border-color: #355e3b; /* Green border color for list items */
+            background-color: #fff; /* White background color for list items */
+            color: #000; /* Black text color */
+            border-radius: 5px; /* Rounded corners */
+            margin-bottom: 10px; /* Margin bottom between list items */
+        }
+        .list-group-item:nth-child(even) {
+            background-color: #f2f2f2; /* Alternate background color for even list items */
         }
     </style>
 </head>

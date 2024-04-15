@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyer Dashboard</title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        /* Custom styles */
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Buyer ID -->
+        <h2 class="text-center mb-4">Buyer Dashboard (ID: <span th:text="${buyerId}"></span>)</h2>
+		
+		
+		<p>  </p>
+        <!-- Line between buttons and table -->
+        <hr>
+        
+        <!-- Button to add review -->
+		<div class="text-center mb-3">
+		    <!-- Button to add a review for a buyer -->
+		    <a th:href="@{'/buyer/' + ${buyerId} + '/addReview'}" class="btn btn-primary">Add Review</a>
+		    <p>Add a review about this Website</p>
+		</div>
+       
+		<p>  </p>
+		
+		<!-- Line between buttons and table -->
+        <hr>
+		
+		<!-- Button to navigate to the transactions page -->
+		<div class="text-center mt-3">
+		    <!-- Button to view transactions -->
+		    <a th:href="@{'/buyer/' + ${buyerId} + '/transactions'}" class="btn btn-info">See Transactions</a>
+		    <p>View your past transactions</p>
+		</div>
+		
+		<p>  </p>
+		
+        <!-- Line between buttons and table -->
+        <hr>
+        
+        <!-- Table to display final crops -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Crop Name</th>
+                    <th>Base Price</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Iterate over final crops without a buyer and display their information -->
+                <tr th:each="crop : ${finalCrops}">
+                    <!-- Display final crop ID -->
+                    <td th:text="${crop.id}"></td>
+                    <!-- Display final crop name -->
+                    <td th:text="${crop.draftCrop.name}"></td>
+                    <!-- Display base price from associated draft crop -->
+                    <td th:text="${crop.draftCrop.basePricePerQuintal}"></td>
+                    <!-- Button to join bidding for the final crop -->
+                    <td>
+                        <!-- Button to join bidding -->
+                        <a th:href="@{/bidding/{finalCropId}/{buyerId}(finalCropId=${crop.id}, buyerId=${buyerId})}" class="btn btn-primary">Join Bidding</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Add Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

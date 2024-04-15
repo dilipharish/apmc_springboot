@@ -9,51 +9,109 @@
     <style>
         /* Custom styles */
         body {
-            background-color: #f8f9fa;
+            background: linear-gradient(120deg, #ffe6cc, rgb(161, 220, 147)); /* Gradient background with soft pastel colors */
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
         .container {
             max-width: 800px;
             margin-top: 50px;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-		.vertical-line {
-		    border-left: 1px solid #000;
-		    height: 50px; /* Adjust height as needed */
-		    margin: 0 10px; /* Adjust margin as needed */
-		}
-
+        .dashboard-header {
+            background-color: #355e3b; /* Dark green color */
+            color: #fff;
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between; /* Align items horizontally */
+            align-items: center; /* Align items vertically */
+        }
+        .dashboard-header h2 {
+            margin: 0;
+            font-size: 28px; /* Increase font size */
+            font-weight: bold; /* Make font bold */
+        }
+        .dashboard-header h4 {
+            margin: 0;
+            font-size: 18px; /* Increase font size */
+            font-weight: bold; /* Make font bold */
+        }
+        .dashboard-header p {
+            font-size: 16px; /* Increase font size */
+            font-weight: bold; /* Make font bold */
+            margin-bottom: 0;
+        }
+        .logout-btn, .btn-primary, .btn-info {
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .logout-btn {
+            background-color: #ff4444; /* Red color */
+            color: #fff;
+            border: none;
+        }
+        .logout-btn:hover {
+            background-color: #cc0000; /* Darker red color on hover */
+        }
+        .btn-primary {
+            background-color: #355e3b; /* Dark green color */
+            color: #fff;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #253d27; /* Darker green color on hover */
+        }
+        .btn-info {
+            background-color: #17a2b8; /* Blue color */
+            color: #fff;
+            border: none;
+        }
+        .btn-info:hover {
+            background-color: #117a8b; /* Darker blue color on hover */
+        }
+        .table th {
+            background-color: #355e3b; /* Dark green color */
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .table td {
+            font-size: 16px;
+            text-align: center;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2 class="text-center mb-4">Farmer Dashboard</h2>
-        <h4>Welcome, <span th:text="${farmer.user.name}"></span> (Farmer ID: <span th:text="${farmer.id}"></span>)</h4>
-        <p>Email: <span th:text="${farmer.user.email}"></span> (User ID: <span th:text="${farmer.user.id}"></span>)</p>
-		<!-- Logout, Add Review, Transactions buttons in the same line -->
-		<hr>
-		        <div class="d-flex justify-content-between align-items-center mb-3">
-		            <!-- Logout button -->
-					<div>					<a href="/login" class="btn btn-danger">Logout</a>
-					<p>User can Log Out here</p></div>
-		            <hr>
-		            <!-- Add Review button -->
-		            <div>
-		                <a th:href="@{'/farmer/' + ${farmer.id} + '/addReview'}" class="btn btn-primary">Add Review</a>
-		                <p>Add a review for your products</p>
-		            </div>
-		            <!-- Transactions button -->
-		            <div>
-		                <a th:href="@{'/farmer/' + ${farmer.id} + '/transactions'}" class="btn btn-info">Transactions</a>
-		                <p>View your transaction history</p>
-		            </div>
-		        </div>
+        <div class="dashboard-header mb-4">
+            <h2>Farmer Dashboard</h2>
+            <a href="/login" class="btn btn-danger logout-btn">Logout</a>
+        </div>
+        
+        <!-- Buttons in the same line -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <!-- Add Review button -->
+            <div>
+                <a th:href="@{'/farmer/' + ${farmer.id} + '/addReview'}" class="btn btn-primary">Add Review</a>
+                <p>Add a review for your products</p>
+            </div>
+            <!-- Transactions button -->
+            <div>
+                <a th:href="@{'/farmer/' + ${farmer.id} + '/transactions'}" class="btn btn-info">Transactions</a>
+                <p>View your transaction history</p>
+            </div>
+        </div>
 
-        <!-- Button to navigate to transactions page -->
-      
         <!-- Line between buttons and table -->
         <hr>
 
@@ -66,7 +124,6 @@
         <!-- Line between buttons and table -->
         <hr>
 
-       
         <!-- Display list of crops -->
         <h3 class="mt-4">List of Crops</h3>
         <table class="table table-striped">

@@ -11,6 +11,12 @@
         body {
             background-color: #f8f9fa;
             font-family: Arial, sans-serif;
+            background: linear-gradient(120deg, #ffe6cc, rgb(161, 220, 147)); /* Gradient background with soft pastel colors */
+            height: 100vh; /* Full height background */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .container {
             max-width: 800px;
@@ -20,21 +26,37 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+        .btn-primary {
+            background-color: #355e3b; /* Dark green color for button */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            width: fit-content;
+            margin: auto;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+        .btn-primary:hover {
+            background-color: #253d27; /* Darker green color on hover */
+        }
+        .table {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2 class="text-center mb-4">Market Official Dashboard</h2>
-		
-		
-		<div class="text-center">
-		    <a href="/marketOfficial/{marketOfficialId}/reviews" class="btn btn-primary">View Reviews</a>
-		</div>
-		<p></p>
-		<div class="text-center">
-		    <a href="/marketOfficial/{marketOfficialId}/finalCropTransactions" class="btn btn-primary">View Final Crop Transactions</a>
-		</div>
-
+        
+        <div class="text-center">
+            <a href="/marketOfficial/{marketOfficialId}/reviews" class="btn btn-primary">View Reviews</a>
+        </div>
+        <div class="text-center">
+            <a href="/marketOfficial/{marketOfficialId}/finalCropTransactions" class="btn btn-primary">View Final Crop Transactions</a>
+        </div>
 
         <table class="table table-striped">
             <thead>
@@ -59,21 +81,21 @@
                     <td th:text="${draftCrop.status}"></td>
                     <td>
                         <form method="post" th:action="@{/marketOfficial/{marketOfficialId}/updateCropStatus/{draftCropId}(marketOfficialId=${marketOfficialId},draftCropId=${draftCrop.id})}">
-                            <select name="status">
+                            <select name="status" class="form-select mb-3">
                                 <option value="APPROVED">Approved</option>
                                 <option value="REJECTED">Rejected</option>
                             </select>
-                            <button type="submit">Update Status</button>
+                            <button type="submit" class="btn btn-primary">Update Status</button>
                         </form>
                     </td>
                 </tr>
             </tbody>
         </table>
-		<div class="text-center">
-			<form method="post" th:action="@{/marketOfficial/{marketOfficialId}/addApprovedCrops(marketOfficialId=${marketOfficialId})}">
-			    <button type="submit" class="btn btn-primary">Add Approved Crops to Final Crops</button>
-			</form>
-		</div>
+        <div class="text-center">
+            <form method="post" th:action="@{/marketOfficial/{marketOfficialId}/addApprovedCrops(marketOfficialId=${marketOfficialId})}">
+                <button type="submit" class="btn btn-primary">Add Approved Crops to Final Crops</button>
+            </form>
+        </div>
     </div>
 
     <!-- Add Bootstrap JS (Optional) -->

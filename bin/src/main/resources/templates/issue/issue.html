@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Add necessary meta tags and title -->
+    <style>
+        /* CSS styles for different sender roles */
+        .issue {
+            margin-bottom: 20px;
+        }
+
+        .sender-farmer {
+            background-color: #d4edda; /* Green background for messages from farmers */
+            border: 1px solid rgb(0, 255, 128);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .sender-buyer {
+            background-color: #cce5ff; /* Blue background for messages from buyers */
+            border: 1px solid #b8daff;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        
+        .sender-market-officer {
+            background-color: rgb(255, 128, 128); /* Yellow background for messages from market officers */
+            border: 1px solid #ffc107;
+            border-radius: 5px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Issues for Final Crop</h2>
+        <div th:each="issue : ${issues}">
+            <div class="issue" th:class="${issue.sender == 'farmer' ? 'sender-farmer' : (issue.sender == 'buyer' ? 'sender-buyer' : 'sender-market-officer')}">
+                <p><strong>Sender:</strong> [[${issue.sender}]]</p>
+                <p><strong>Message:</strong> [[${issue.message}]]</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

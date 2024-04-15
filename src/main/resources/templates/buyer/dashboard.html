@@ -9,16 +9,57 @@
     <style>
         /* Custom styles */
         body {
-            background-color: #f8f9fa;
+            background: linear-gradient(120deg, #ffe6cc, rgb(161, 220, 147)); /* Gradient background with soft pastel colors */
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
         .container {
             max-width: 800px;
             margin-top: 50px;
             padding: 20px;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #355e3b; /* Dark green color for buttons */
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            color: #fff;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+        }
+        .btn-primary:hover {
+            background-color: #2d4b31; /* Darker green color on hover */
+        }
+        .btn-info {
+            background-color: #0056b3; /* Blue color for buttons */
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            color: #fff;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+        }
+        .btn-info:hover {
+            background-color: #003973; /* Darker blue color on hover */
+        }
+        .table th {
+            background-color: #355e3b; /* Dark green color for table headers */
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .table td {
+            font-size: 14px;
+            text-align: center;
+            vertical-align: middle;
         }
     </style>
 </head>
@@ -26,36 +67,30 @@
     <div class="container">
         <!-- Buyer ID -->
         <h2 class="text-center mb-4">Buyer Dashboard (ID: <span th:text="${buyerId}"></span>)</h2>
-		
-		
-		<p>  </p>
+
         <!-- Line between buttons and table -->
         <hr>
-        
+
         <!-- Button to add review -->
-		<div class="text-center mb-3">
-		    <!-- Button to add a review for a buyer -->
-		    <a th:href="@{'/buyer/' + ${buyerId} + '/addReview'}" class="btn btn-primary">Add Review</a>
-		    <p>Add a review about this Website</p>
-		</div>
-       
-		<p>  </p>
-		
-		<!-- Line between buttons and table -->
-        <hr>
-		
-		<!-- Button to navigate to the transactions page -->
-		<div class="text-center mt-3">
-		    <!-- Button to view transactions -->
-		    <a th:href="@{'/buyer/' + ${buyerId} + '/transactions'}" class="btn btn-info">See Transactions</a>
-		    <p>View your past transactions</p>
-		</div>
-		
-		<p>  </p>
-		
+        <div class="text-center mb-3">
+            <!-- Button to add a review for a buyer -->
+            <a th:href="@{'/buyer/' + ${buyerId} + '/addReview'}" class="btn btn-primary">Add Review</a>
+            <p>Add a review about this Website</p>
+        </div>
+
         <!-- Line between buttons and table -->
         <hr>
-        
+
+        <!-- Button to navigate to the transactions page -->
+        <div class="text-center mt-3">
+            <!-- Button to view transactions -->
+            <a th:href="@{'/buyer/' + ${buyerId} + '/transactions'}" class="btn btn-info">See Transactions</a>
+            <p>View your past transactions</p>
+        </div>
+
+        <!-- Line between buttons and table -->
+        <hr>
+
         <!-- Table to display final crops -->
         <table class="table table-striped">
             <thead>

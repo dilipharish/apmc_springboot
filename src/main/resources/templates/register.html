@@ -11,23 +11,59 @@
         body {
             background-color: #f8f9fa;
             font-family: Arial, sans-serif;
+			background: linear-gradient(120deg, #ffe6cc, rgb(161, 220, 147)); /* Gradient background with soft pastel colors */
+            height: 100vh; /* Full height background */
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .container {
             max-width: 500px;
             margin-top: 50px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgb(0, 91, 36);
             padding: 40px;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.9); /* Transparent white background */
+        }
+        .container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #355e3b; /* Dark green color for heading */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Text shadow for depth */
+        }
+        .form-label {
+            font-weight: bold;
+            color: #355e3b; /* Dark green color for labels */
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #355e3b; /* Dark green border */
+            border-radius: 5px;
+            box-sizing: border-box;
         }
         .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
+            background-color: #355e3b; /* Dark green color for button */
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            transition: background-color 0.3s ease; /* Smooth transition */
         }
         .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
+            background-color: #253d27; /* Darker green color on hover */
         }
+       
+		.form-check-input:checked {
+		    background-color: #355e3b; /* Dark green color for checked radio button */
+		    border-color: #355e3b; /* Dark green color for checked radio button border */
+		}
+
     </style>
     <script>
         function redirectToUsersPage() {
@@ -37,7 +73,7 @@
 </head>
 <body>
     <div class="container">
-        <h2 class="text-center mb-4">Registration</h2>
+        <h2>Registration</h2>
         
         <div th:if="${message != null}" class="alert alert-success" role="alert"> 
             [[${message}]]
